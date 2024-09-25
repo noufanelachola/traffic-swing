@@ -3,6 +3,40 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+class TrafficPanel extends JPanel {
+    Color redColor = new Color(128,0,0);
+    Color yellowColor = new Color(128,128,0);
+    Color greenColor = new Color(0,128,0);
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        // Set color for the outer rectangle (traffic light box)
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(100, 50, 200, 400);
+
+        // Draw red light
+        g.setColor(redColor);
+        g.fillOval(150, 75, 100, 100);
+
+        // Draw yellow light
+        g.setColor(yellowColor);
+        g.fillOval(150, 200, 100, 100);
+
+        // Draw green light
+        g.setColor(greenColor);
+        g.fillOval(150, 325, 100, 100);
+    }
+
+    public void changeLight(String light) {
+        redColor = light.equals("Red") ? Color.RED : new Color(128,0,0);
+        yellowColor = light.equals("Yellow") ? Color.YELLOW : new Color(128,128,0);
+        greenColor = light.equals("Green") ? Color.GREEN : new Color(0,128,0);
+        repaint();  // Repaint the panel with updated colors
+    }
+}
+
 public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
@@ -14,50 +48,28 @@ public class Main {
         ImageIcon icon = new ImageIcon("D:\\Codes\\Java\\Swing\\Projects\\04-Traffic\\traffic-lights.png");
         frame.setIconImage(icon.getImage());
 
-        JPanel panel = new JPanel() {
+//        JPanel panel = new JPanel() {};
+//        panel.setPreferredSize(new Dimension(400, 600));
+//        panel.setBackground(Color.BLACK);
+//        panel.setPreferredSize(new Dimension(400, 600));
+//        panel.setBackground(Color.BLACK);
 
-            Color redColor = Color.DARK_GRAY;
-            Color yellowColor = Color.DARK_GRAY;
-            Color greenColor = Color.DARK_GRAY;
-
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-
-                // Set color for the outer rectangle (traffic light box)
-                g.setColor(Color.DARK_GRAY);
-                g.fillRect(100, 50, 200, 400);
-
-                // Draw red light
-                g.setColor(redColor);
-                g.fillOval(150, 75, 100, 100);
-
-                // Draw yellow light
-                g.setColor(yellowColor);
-                g.fillOval(150, 200, 100, 100);
-
-                // Draw green light
-                g.setColor(greenColor);
-                g.fillOval(150, 325, 100, 100);
-            }
-
-            public void changeLight(String light) {
-                redColor = light.equals("Red") ? Color.RED : Color.DARK_GRAY;
-                yellowColor = light.equals("Yellow") ? Color.YELLOW : Color.DARK_GRAY;
-                greenColor = light.equals("Green") ? Color.GREEN : Color.DARK_GRAY;
-                repaint();  // Repaint the panel with updated colors
-            }
-
-        };
-        panel.setPreferredSize(new Dimension(400, 600));
+        TrafficPanel panel = new TrafficPanel();
         panel.setBackground(Color.BLACK);
-        panel.setPreferredSize(new Dimension(400, 600));
-        panel.setBackground(Color.BLACK);
+
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new GridLayout(2,1));
+
+        JPanel labelPanel = new JPanel();
+        labelPanel.setBackground(Color.DARK_GRAY);
+        JLabel label = new JLabel("Kunnamkulam Traffic Control Unit");
+        label.setFont(new Font("Poppins", Font.BOLD,25));
+        label.setForeground(Color.WHITE);
+        labelPanel.add(label);
 
         JPanel panel2 = new JPanel();
-        panel2.setPreferredSize(new Dimension(400, 600));
         panel2.setLayout(new FlowLayout(FlowLayout.CENTER));
-        panel2.setBackground(Color.GREEN);
+        panel2.setBackground(Color.DARK_GRAY);
 
         JRadioButton redBtn = new JRadioButton("Red");
         JRadioButton yellowBtn = new JRadioButton("Yellow");
@@ -67,6 +79,10 @@ public class Main {
         btnGroup.add(redBtn);
         btnGroup.add(yellowBtn);
         btnGroup.add(greenBtn);
+
+        redBtn.setForeground(Color.WHITE);
+        yellowBtn.setForeground(Color.WHITE);
+        greenBtn.setForeground(Color.WHITE);
 
         redBtn.setOpaque(false);
         yellowBtn.setOpaque(false);
@@ -98,7 +114,9 @@ public class Main {
         greenBtn.addActionListener(actionListener);
 
         frame.add(panel);
-        frame.add(panel2);
+        controlPanel.add(labelPanel);
+        controlPanel.add(panel2);
+        frame.add(controlPanel);
 
 
         frame.setVisible(true);
